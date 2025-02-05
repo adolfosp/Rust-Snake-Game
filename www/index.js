@@ -25,6 +25,6 @@ init().then((_) => {
 
     ctx.stroke();
   }
-
+  
   drawWorld();
 });
