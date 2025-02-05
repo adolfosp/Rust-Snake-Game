@@ -26,8 +26,10 @@ cargo install wasm-pack
 
 ### Criar o pkg
 
+- O comando abaixo cria o pkg, porém dentro da pasta www -> package.json está em um script para ser rodado
+
 ```bash
 wasm-pack build --target web
 ```
-
-- Esse pkg é referenciado dentro do package.json da seguinte forma: `"snake_game": "file:../pkg"`
+> ℹ️ **Info**
+> Esse pkg é referenciado dentro do package.json da seguinte forma: `"snake_game": "file:../pkg"`
