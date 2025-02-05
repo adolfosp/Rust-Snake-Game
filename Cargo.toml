@@ -1,33 +1,16 @@
-## Depedências instaladas
-
-```toml
 [package]
 name = "snake_game"
 version = "0.1.0"
 edition = "2021"
+description = "Make a snake game"
+repository = ""
 
 [dependencies]
 # O wasm-bindgen é uma biblioteca essencial para integração entre Rust e WebAssembly
 wasm-bindgen = "0.2.63"
+wee_alloc = "0.4.5"
 
 [lib]
 # Define o tipo de crate (unidade de código em Rust) que será produzido como saída. O cdylib significa que o projeto será compilado como uma biblioteca dinâmica (shared library) compatível com C e outras linguagens (neste caso, para WebAssembly)
 crate-type = ["cdylib"]
 
-
-```
-
-## Comandos executados
-
-### Instalar pacote
-```bash
-cargo install wasm-pack
-```
-
-### Criar o pkg
-
-```bash
-wasm-pack build --target web
-```
-
-- Esse pkg é referenciado dentro do package.json da seguinte forma: `"snake_game": "file:../pkg"`
