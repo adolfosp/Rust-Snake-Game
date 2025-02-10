@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack-dev-server",
+    "predev": "npm run wasm-build",
     "build": "webpack build",
     "wasm-build": "wasm-pack build --target web",
     "wasm-build-comment": "Criar um .wasm para ser importado no index.html"

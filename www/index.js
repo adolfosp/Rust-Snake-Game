@@ -26,5 +26,28 @@ init().then((_) => {
     ctx.stroke();
   }
   
+  function drawSnake() {
+   const snakeIdx = world.snake_head_idx();
+   const col = snakeIdx % worldWidth;
+   const row = Math.floor(snakeIdx / worldWidth);
+
+   ctx.beginPath();
+   ctx.fillRect(
+    col * CELL_SIZE,// x
+    row * CELL_SIZE,// y
+    CELL_SIZE,// width
+    CELL_SIZE// height
+   );
+   ctx.stroke();
+  }
+
   drawWorld();
+  drawSnake();
+
+  setInterval(() => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawWorld();
+    drawSnake();
+    world.update();
+  }, 1000); 
 });
