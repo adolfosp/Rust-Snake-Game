@@ -2,9 +2,13 @@ import init, { World } from "snake_game";
 
 init().then((_) => {
   const CELL_SIZE = 10;
-  const world = World.new();
+  const WORLD_WIDTH = 8;
+  const snakeSpawnIdx = Date.now() % (WORLD_WIDTH * WORLD_WIDTH);
+
+  const world = World.new(WORLD_WIDTH, snakeSpawnIdx);
   const worldWidth = world.width();
-  const canvas = <HTMLCanvasElement> document.getElementById("snake-canvas");
+
+  const canvas = <HTMLCanvasElement>document.getElementById("snake-canvas");
   const ctx = canvas.getContext("2d");
 
   canvas.height = worldWidth * CELL_SIZE;
@@ -47,6 +51,7 @@ init().then((_) => {
   }
 
   function update() {
+    const fps = 3;
     setTimeout(() => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       world.update();
@@ -55,7 +60,7 @@ init().then((_) => {
       //O requestAnimationFrame ajusta automaticamente a taxa de atualização para coincidir com a taxa de frames do monitor (geralmente 60 FPS, ou seja, ~16,67ms por frame).
       //Já o setInterval executa chamadas em um intervalo fixo, sem considerar a taxa de atualização da tela, o que pode levar a frames perdidos ou inconsistências.
       requestAnimationFrame(update);
-    }, 100);
+    }, 1000 / fps);
   }
 
   paint();
