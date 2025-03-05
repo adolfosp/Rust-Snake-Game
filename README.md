@@ -33,3 +33,33 @@ wasm-pack build --target web
 ```
 > ℹ️ **Info**
 > Esse pkg é referenciado dentro do package.json da seguinte forma: `"snake_game": "file:../pkg"`
+
+
+## Explicação
+
+### Derive
+
+Essa linha de código em Rust está utilizando a macro `derive` para automaticamente implementar a trait `PartialEq` para a estrutura ou enum que está sendo definida. A trait `PartialEq` permite comparar se duas instâncias de um tipo são iguais ou não, utilizando o operador `==`.
+
+Por exemplo, se você tiver uma estrutura como esta:
+
+```rust
+#[derive(PartialEq)]
+struct Point {
+    x: i32,
+    y: i32,
+}
+```
+
+Com a derivação de `PartialEq`, você pode comparar duas instâncias de `Point` diretamente:
+
+```rust
+let p1 = Point { x: 1, y: 2 };
+let p2 = Point { x: 1, y: 2 };
+let p3 = Point { x: 3, y: 4 };
+
+assert!(p1 == p2); // true
+assert!(p1 != p3); // true
+```
+
+Sem a derivação de `PartialEq`, você teria que implementar manualmente a lógica de comparação para a estrutura `Point`.
