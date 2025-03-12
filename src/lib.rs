@@ -61,11 +61,14 @@ impl World {
 
     pub fn update(&mut self){
         let snake_idx = self.snake_head_idx();
+        let row = snake_idx / self.width;
 
         if self.snake.direction == Direction::Right {
-            self.snake.body[0].0 = (snake_idx + 1) % self.size;
+            let next_col = (snake_idx + 1) % self.width;
+            self.snake.body[0].0 = (row * self.width) + next_col;
         } else if self.snake.direction == Direction::Left {
-            self.snake.body[0].0 = (snake_idx + self.width - 1) % self.size;
+            let next_col = (snake_idx - 1) % self.width;
+            self.snake.body[0].0 = (row * self.width) + next_col;
         }
     }
 }
