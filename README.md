@@ -1,3 +1,8 @@
+## Projeto Original
+
+- [GitHub](https://github.com/Jerga99/snake-rust-game)
+
+
 ## Depedências instaladas
 
 ```toml
