@@ -5,8 +5,9 @@ use wee_alloc::WeeAlloc;
 #[global_allocator]
 static ALLOC: WeeAlloc = WeeAlloc::INIT;
 
+#[wasm_bindgen]
 #[derive(PartialEq)]
-enum Direction {
+pub enum Direction {
     Up = 0,
     Down = 1,
     Left = 2,
@@ -57,6 +58,10 @@ impl World {
 
     pub fn snake_head_idx(&self) -> usize {
         self.snake.body[0].0
+    }
+
+    pub fn change_snake_dir(&mut self, direction: Direction) {
+        self.snake.direction = direction;
     }
 
     pub fn update(&mut self) {
