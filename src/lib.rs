@@ -16,14 +16,23 @@ pub enum Direction {
 
 struct SnakeCell(usize);
 
+
 /* Struct Snake*/
 struct Snake {
     body: Vec<SnakeCell>,
     direction: Direction,
 }
 
+
 impl Snake {
-    fn new(spaw_index: usize) -> Snake {
+    fn new(spaw_index: usize, size: usize) -> Snake {
+
+        let mut body = vec!();
+
+        for i in 0..size {
+            body.push(SnakeCell(spaw_index - i));
+        }
+
         Snake {
             body: vec![SnakeCell(spaw_index)],
             direction: Direction::Right,
@@ -48,7 +57,7 @@ impl World {
         World {
             width,
             size: width * width,
-            snake: Snake::new(snake_idx),
+            snake: Snake::new(snake_idx, 3),
         }
     }
 
