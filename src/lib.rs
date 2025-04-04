@@ -14,7 +14,7 @@ pub enum Direction {
     Right = 3,
 }
 
-struct SnakeCell(usize);
+pub struct SnakeCell(usize);
 
 
 /* Struct Snake*/
@@ -71,6 +71,11 @@ impl World {
 
     pub fn change_snake_dir(&mut self, direction: Direction) {
         self.snake.direction = direction;
+    }
+
+    // *const is raw pointer, it is not safe to dereference it directly 06:23
+    pub fn snake_cells(&self) -> *const SnakeCell {
+       self.snake.body.as_ptr()
     }
 
     pub fn update(&mut self) {
