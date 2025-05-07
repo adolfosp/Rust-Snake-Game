@@ -78,6 +78,10 @@ impl World {
        self.snake.body.as_ptr()
     }
 
+    pub fn snake_length(&self) -> usize {
+        self.snake.body.len()
+    }
+
     pub fn update(&mut self) {
         let snake_idx = self.snake_head_idx();
         let (row, col) = self.index_to_cell(snake_idx);
