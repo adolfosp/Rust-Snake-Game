@@ -1,4 +1,3 @@
-import { world_snake_length } from './../pkg/snake_game_bg.wasm.d';
 import init, { World, Direction } from "snake_game";
 
 init().then((wasm) => {
@@ -57,7 +56,7 @@ init().then((wasm) => {
       const col = cellIdx % worldWidth;
       const row = Math.floor(cellIdx / worldWidth);
 
-      ctx.fillStyle = i === 0 ? "#7878db" : "#000000";
+      ctx.fillStyle = i === 0 ? "#7878db" : "#000f00";
       ctx.beginPath();
       ctx.fillRect(
         col * CELL_SIZE, // x

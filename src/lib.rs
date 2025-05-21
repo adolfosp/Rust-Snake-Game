@@ -8,14 +8,13 @@ static ALLOC: WeeAlloc = WeeAlloc::INIT;
 #[wasm_bindgen]
 #[derive(PartialEq)]
 pub enum Direction {
-    Up = 0,
-    Down = 1,
-    Left = 2,
-    Right = 3,
+    Up,
+    Right,
+    Down,
+    Left
 }
 
 pub struct SnakeCell(usize);
-
 /* Struct Snake*/
 struct Snake {
     body: Vec<SnakeCell>,
@@ -23,15 +22,15 @@ struct Snake {
 }
 
 impl Snake {
-    fn new(spaw_index: usize, size: usize) -> Snake {
-        let mut body = vec![];
+    fn new(spawn_index: usize, size: usize) -> Snake {
+        let mut body = vec!();
 
         for i in 0..size {
-            body.push(SnakeCell(spaw_index - i));
+            body.push(SnakeCell(spawn_index - i));
         }
 
         Snake {
-            body: vec![SnakeCell(spaw_index)],
+            body,
             direction: Direction::Right,
         }
     }
@@ -39,13 +38,12 @@ impl Snake {
 /* Struct Snake*/
 
 /* Struct World*/
-
 //wasmbindgen é uma macro que permite a comunicação entre o código Rust e o JavaScript
 #[wasm_bindgen]
 pub struct World {
-    pub width: usize,
-    snake: Snake,
+    width: usize,
     size: usize,
+    snake: Snake,
 }
 
 #[wasm_bindgen]
@@ -54,7 +52,7 @@ impl World {
         World {
             width,
             size: width * width,
-            snake: Snake::new(snake_idx, 3),
+            snake: Snake::new(snake_idx, 3)
         }
     }
 
@@ -63,7 +61,7 @@ impl World {
     }
 
     pub fn snake_head_idx(&self) -> usize {
-        self.snake.body[0].0
+       self.snake.body[0].0
     }
 
     pub fn change_snake_dir(&mut self, direction: Direction) {
@@ -71,12 +69,12 @@ impl World {
     }
 
     // *const is raw pointer, it is not safe to dereference it directly 06:23
-    pub fn snake_cells(&self) -> *const SnakeCell {
-        self.snake.body.as_ptr()
-    }
-
     pub fn snake_length(&self) -> usize {
         self.snake.body.len()
+    }
+
+    pub fn snake_cells(&self) -> *const SnakeCell {
+        self.snake.body.as_ptr()
     }
 
     pub fn step(&mut self) {
@@ -89,11 +87,39 @@ impl World {
         let row = snake_idx / self.width;
 
         return match self.snake.direction {
-            Direction::Right => SnakeCell((row * self.width) + (snake_idx + 1) % self.width),
-            Direction::Left => SnakeCell((row * self.width) + (snake_idx - 1) % self.width),
-            Direction::Up => SnakeCell((snake_idx - self.width) % self.size),
-            Direction::Down => SnakeCell((snake_idx + self.width) % self.size),
+            Direction::Right => {
+                let treshold = (row + 1) * self.width;
+                if snake_idx + 1 == treshold {
+                    SnakeCell(treshold - self.width)
+                } else {
+                    SnakeCell(snake_idx + 1)
+                }
+            },
+            Direction::Left => {
+                let treshold = row * self.width;
+                if snake_idx == treshold {
+                    SnakeCell(treshold + (self.width - 1))
+                } else {
+                    SnakeCell(snake_idx - 1)
+                }
+            },
+            Direction::Up => {
+                let treshold = snake_idx - (row * self.width);
+                if snake_idx == treshold {
+                    SnakeCell((self.size - self.width) + treshold)
+                } else {
+                    SnakeCell(snake_idx - self.width)
+                }
+            },
+            Direction::Down => {
+                let treshold = snake_idx + ((self.width - row) * self.width);
+                if snake_idx + self.width == treshold {
+                    SnakeCell(treshold - ((row + 1) * self.width))
+                } else {
+                    SnakeCell(snake_idx + self.width)
+                }
+            },
         };
     }
-}
-/* Struct World*/
+
+}/* Struct World*/
