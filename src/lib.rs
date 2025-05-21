@@ -16,18 +16,15 @@ pub enum Direction {
 
 pub struct SnakeCell(usize);
 
-
 /* Struct Snake*/
 struct Snake {
     body: Vec<SnakeCell>,
     direction: Direction,
 }
 
-
 impl Snake {
     fn new(spaw_index: usize, size: usize) -> Snake {
-
-        let mut body = vec!();
+        let mut body = vec![];
 
         for i in 0..size {
             body.push(SnakeCell(spaw_index - i));
@@ -75,38 +72,28 @@ impl World {
 
     // *const is raw pointer, it is not safe to dereference it directly 06:23
     pub fn snake_cells(&self) -> *const SnakeCell {
-       self.snake.body.as_ptr()
+        self.snake.body.as_ptr()
     }
 
     pub fn snake_length(&self) -> usize {
         self.snake.body.len()
     }
 
-    pub fn update(&mut self) {
+    pub fn step(&mut self) {
+        let next_cell = self.gen_next_snake_cell();
+        self.snake.body[0] = next_cell;
+    }
+
+    fn gen_next_snake_cell(&self) -> SnakeCell {
         let snake_idx = self.snake_head_idx();
-        let (row, col) = self.index_to_cell(snake_idx);
-        let (row, col) = match self.snake.direction {
-            Direction::Right => (row, (col + 1) % self.width),
-            Direction::Left => (row, (col - 1) % self.width),
-            Direction::Up => ((row - 1) % self.width, col),
-            Direction::Down => ((row + 1) % self.width, col),
+        let row = snake_idx / self.width;
+
+        return match self.snake.direction {
+            Direction::Right => SnakeCell((row * self.width) + (snake_idx + 1) % self.width),
+            Direction::Left => SnakeCell((row * self.width) + (snake_idx - 1) % self.width),
+            Direction::Up => SnakeCell((snake_idx - self.width) % self.size),
+            Direction::Down => SnakeCell((snake_idx + self.width) % self.size),
         };
-
-        let next_idx = self.cell_to_index(row, col);
-        self.set_snake_head(next_idx);
-   
-    }
-
-    fn set_snake_head(&mut self, idx: usize) {
-        self.snake.body[0].0 = idx;
-    }
-
-    fn index_to_cell(&self, idx: usize) -> (usize, usize) {
-        (idx / self.width, idx % self.width)
-    }
-
-    fn cell_to_index(&self, row: usize, col: usize) -> usize {
-        (row * self.width) + col
     }
 }
 /* Struct World*/

@@ -1,3 +1,4 @@
+import { world_snake_length } from './../pkg/snake_game_bg.wasm.d';
 import init, { World, Direction } from "snake_game";
 
 init().then((wasm) => {
@@ -14,14 +15,6 @@ init().then((wasm) => {
   canvas.height = worldWidth * CELL_SIZE;
   canvas.width = worldWidth * CELL_SIZE;
 
-  const snakeCellPtr = world.snake_cells();
-  const snakeLen = world.snake_length();
-
-  const snakeCells = new Uint32Array(
-    wasm.memory.buffer,
-    snakeCellPtr,
-    snakeLen
-  );
 
   document.addEventListener("keydown", (event) => {
     switch (event.key) {
@@ -57,17 +50,24 @@ init().then((wasm) => {
   }
 
   function drawSnake() {
-    const snakeIdx = world.snake_head_idx();
-    const col = snakeIdx % worldWidth;
-    const row = Math.floor(snakeIdx / worldWidth);
+    const snakeCells = new Uint32Array(wasm.memory.buffer, world.snake_cells(), world.snake_length());
 
-    ctx.beginPath();
-    ctx.fillRect(
-      col * CELL_SIZE, // x
-      row * CELL_SIZE, // y
-      CELL_SIZE, // width
-      CELL_SIZE // height
-    );
+    snakeCells.forEach((cellIdx, i) => {
+
+      const col = cellIdx % worldWidth;
+      const row = Math.floor(cellIdx / worldWidth);
+
+      ctx.fillStyle = i === 0 ? "#7878db" : "#000000";
+      ctx.beginPath();
+      ctx.fillRect(
+        col * CELL_SIZE, // x
+        row * CELL_SIZE, // y
+        CELL_SIZE, // width
+        CELL_SIZE // height
+      );
+    });
+
+
     ctx.stroke();
   }
 
@@ -80,7 +80,7 @@ init().then((wasm) => {
     const fps = 3;
     setTimeout(() => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      world.update();
+      world.step();
       paint();
       // the method takes a callback function as an argument
       //O requestAnimationFrame ajusta automaticamente a taxa de atualização para coincidir com a taxa de frames do monitor (geralmente 60 FPS, ou seja, ~16,67ms por frame).
