@@ -48,6 +48,24 @@ init().then((wasm) => {
     ctx.stroke();
   }
 
+  function drawReward() {
+
+    const idx = world.reward_cell();
+    const col = idx % worldWidth;
+    const row = Math.floor(idx / worldWidth);
+
+
+    ctx.beginPath();
+    ctx.fillStyle = "#FF0000";
+    ctx.fillRect(
+        col * CELL_SIZE, // x
+        row * CELL_SIZE, // y
+        CELL_SIZE, // width
+        CELL_SIZE // height
+      );
+    ctx.stroke();
+  }
+
   function drawSnake() {
     const snakeCells = new Uint32Array(wasm.memory.buffer, world.snake_cells(), world.snake_length());
 
@@ -73,6 +91,7 @@ init().then((wasm) => {
   function paint() {
     drawWorld();
     drawSnake();
+    drawReward();
   }
 
   function update() {
