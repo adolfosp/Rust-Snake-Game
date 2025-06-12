@@ -125,8 +125,13 @@ impl World {
         }
 
         let len = self.snake.body.len();
+
         for i in 1..len {
             self.snake.body[i] = SnakeCell(temp[i - 1].0);
+        }
+
+        if self.reward_cell == self.snake_head_idx(){
+            self.snake.body.push(SnakeCell(self.snake.body[1].0));
         }
     }
 
