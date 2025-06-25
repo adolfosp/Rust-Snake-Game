@@ -9,12 +9,25 @@ init().then((wasm) => {
   const world = World.new(WORLD_WIDTH, snakeSpawnIdx);
   const worldWidth = world.width();
 
+  const gameControlBtn = document.getElementById("game-control-btn");
+
   const canvas = <HTMLCanvasElement>document.getElementById("snake-canvas");
   const ctx = canvas.getContext("2d");
 
   canvas.height = worldWidth * CELL_SIZE;
   canvas.width = worldWidth * CELL_SIZE;
 
+  gameControlBtn?.addEventListener("click", _ => {
+    const gameStatus = world.game_status();
+
+    if(gameStatus === undefined){
+      gameControlBtn.textContent = "Playing....";
+      world.start_game();
+      play();
+    }else{
+      location.reload();
+    }
+  })
 
   document.addEventListener("keydown", (event) => {
     switch (event.key) {
@@ -95,7 +108,7 @@ init().then((wasm) => {
     drawReward();
   }
 
-  function update() {
+  function play() {
     const fps = 3;
     setTimeout(() => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -104,10 +117,9 @@ init().then((wasm) => {
       // the method takes a callback function as an argument
       //O requestAnimationFrame ajusta automaticamente a taxa de atualização para coincidir com a taxa de frames do monitor (geralmente 60 FPS, ou seja, ~16,67ms por frame).
       //Já o setInterval executa chamadas em um intervalo fixo, sem considerar a taxa de atualização da tela, o que pode levar a frames perdidos ou inconsistências.
-      requestAnimationFrame(update);
+      requestAnimationFrame(play);
     }, 1000 / fps);
   }
 
   paint();
-  update();
 });
