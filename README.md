@@ -68,3 +68,7 @@ assert!(p1 != p3); // true
 ```
 
 Sem a derivação de `PartialEq`, você teria que implementar manualmente a lógica de comparação para a estrutura `Point`.
+
+## Rodar o projeto
+
+Entre na pasta www e rode o comando `npm run dev`. Será fornecido um link para acesso ao navegador
